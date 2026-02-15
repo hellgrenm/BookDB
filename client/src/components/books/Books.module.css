@@ -1,0 +1,50 @@
+.resultsDiv {
+
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+}
+
+.book {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  width: 50%;
+  margin: 10px;
+}
+
+.book img {
+  flex-shrink: 0;
+  width: 128px; 
+  height: auto;
+  object-fit: cover;
+}
+
+.bookInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.bookInfo h3 {
+  margin: 0;
+}
+
+.bookInfo p {
+  margin: 0;
+}
+
+.bookLink {
+  text-decoration: none;
+  color: inherit;
+}
+
+.rateBook{
+  text-decoration: 25%;
+  width: auto;
+}

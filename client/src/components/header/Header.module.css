@@ -1,0 +1,38 @@
+
+.navbar {
+  width: 100vw;
+  background-color: rgb(34, 34, 34);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0 20px;
+}
+
+.navLogo {
+  max-height: 80px;
+  width: auto;
+}
+
+.navLinks{
+  text-decoration: none;
+  color: #ffffff;
+  font-weight: 500; 
+  margin: 15px;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.navLinks:hover {
+  transform: translateY(-2px); 
+}
+
+
+.navLinks:global(.active) {
+  color: #ffffff;
+  box-shadow: 0 2px 0 0 #007bff;
+}
+
+.navForm{
+  min-width: 85%;
+  max-width: 90%;
+}

@@ -1,0 +1,14 @@
+.footer {
+  background-color: white;
+  height:40px;
+  width: 10%; 
+  position: fixed;
+  bottom: 0pt;
+  left: 0pt;
+
+}
+
+.githubPic{
+  max-width: 40px;
+  max-height: 40px;
+}

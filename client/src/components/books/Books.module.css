@@ -29,6 +29,7 @@
   flex-direction: column;
   gap: 0.5rem;
   flex: 1;
+  align-items: center;
 }
 
 .bookInfo h3 {
@@ -46,5 +47,5 @@
 
 .rateBook{
   text-decoration: 25%;
-  width: auto;
+  width: 25%;
 }

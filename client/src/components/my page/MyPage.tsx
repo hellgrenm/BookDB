@@ -148,10 +148,10 @@ export function MyPage(){
                   {book ? (
                     <>
                       {book.imageLinks?.thumbnail && (
-                        <a href={book.previewLink} target='_blank'> <img src={book.imageLinks.thumbnail} alt={book.title} /> </a> 
+                        <img src={book.imageLinks.thumbnail} alt={book.title} /> 
                       )}
                       <div className={styles.voteInfo}>
-                        <h3>{book.title}</h3>
+                        <a href={book.previewLink} target='_blank'><h3>{book.title}</h3></a> 
                         <p>Author: {book.authors?.join(', ')}</p>
                         <p className={styles.rating}>
                           Your rating: {'⭐'.repeat(vote.rating)} ({vote.rating}/5)

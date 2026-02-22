@@ -50,7 +50,7 @@ export function Books(){
     setLoading(true);
     try {
       const response = await axios.get(
-        `https://www.googleapis.com/books/v1/volumes?q=${query}&key=${api_key}&maxresults=10`
+        `https://www.googleapis.com/books/v1/volumes?q=${query}&key=${api_key}&maxresults=20`
       );
       setBooks(response.data.items || []);
     } catch (error) {

@@ -36,3 +36,17 @@
   min-width: 85%;
   max-width: 90%;
 }
+
+  .smallMenu {
+    display: none; /* Dold som standard */
+  }
+
+
+@media only screen and (max-width: 700px) {
+  .navLinks{
+    display: none;
+  }
+  .navLogo:hover + .smallMenu {
+    display: block;
+  }
+}

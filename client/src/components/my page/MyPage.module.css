@@ -91,6 +91,7 @@
 
 .voteInfo {
   flex: 1;
+  color:#666;
 }
 
 .voteInfo h3 {
@@ -101,7 +102,11 @@
 .voteInfo p {
   margin: 0.25rem 0;
   font-size: 0.9rem;
-  color: #666;
+
+}
+.voteInfo a {
+  text-decoration: none;
+    color: #000000;
 }
 
 .rating {

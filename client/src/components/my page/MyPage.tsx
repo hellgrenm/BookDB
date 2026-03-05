@@ -6,6 +6,12 @@ interface Vote {
   book_id: string;
   rating: number;
   created_at: string;
+  title: string;
+  authors: string[];
+  thumbnail: string;
+  description: string;
+  previewLink?: string;
+  comment?: string;
 }
 
 
@@ -16,7 +22,7 @@ export function MyPage(){
   const [loggedInUser, setLoggedInUser] = useState<any>(null);
 
   const [userVotes, setUserVotes] = useState<Vote[]>([]);
-  const [bookDetails, setBookDetails] = useState<any>({});
+
 
   const usernameRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
@@ -32,36 +38,16 @@ export function MyPage(){
   }, []);
 
 
-  const fetchUserVotes = async (userId: number) => {
-    try {
-      const response = await axios.get(`http://localhost:8080/api/user-votes/${userId}`);
-      const votes = response.data.votes;
-      setUserVotes(votes);
-      
+const fetchUserVotes = async (userId: number) => {
+  try {
+    const response = await axios.get(`http://localhost:8080/api/user-votes/${userId}`);
+    setUserVotes(response.data.votes); 
 
-      votes.forEach((vote: Vote) => {
-        fetchBookDetails(vote.book_id);
-      });
-    } catch (error) {
-      console.error('Failed to fetch votes:', error);
-    }
-  };
+  } catch (error) {
+    console.error('Failed to fetch votes:', error);
+  }
+};
 
-
-  const fetchBookDetails = async (bookId: string) => {
-    try {
-      const response = await axios.get(
-        `https://www.googleapis.com/books/v1/volumes/${bookId}`
-      );
-
-      setBookDetails((prev: any) => ({
-        ...prev,
-        [bookId]: response.data.volumeInfo
-      }));
-    } catch (error) {
-      console.error('Failed to fetch book details:', error);
-    }
-  };
 
 
 
@@ -126,7 +112,6 @@ export function MyPage(){
     const handleLogout = () => {
     setLoggedInUser(null);
     setUserVotes([]);
-    setBookDetails({});
     localStorage.removeItem('user');
   };
 
@@ -142,32 +127,32 @@ export function MyPage(){
         ) : (
           <div className={styles.votesContainer}>
             {userVotes.map((vote) => {
-              const book = bookDetails[vote.book_id];
-              return (
-                <div key={vote.book_id} className={styles.voteCard}>
-                  {book ? (
-                    <>
-                      {book.imageLinks?.thumbnail && (
-                        <img src={book.imageLinks.thumbnail} alt={book.title} /> 
-                      )}
-                      <div className={styles.voteInfo}>
-                        <a href={book.previewLink} target='_blank'><h3>{book.title}</h3></a> 
-                        <p>Author: {book.authors?.join(', ')}</p>
-                        <p className={styles.rating}>
-                          Your rating: {'⭐'.repeat(vote.rating)} ({vote.rating}/5)
-                        </p>
-                        <p className={styles.date}>
-                          Rated: {new Date(vote.created_at).toLocaleDateString()}
-                        </p>
-                        <span> <button onClick={() => handleRemove(vote.book_id)}>Remove rating</button></span>
-                      </div>
-                    </>
-                  ) : (
-                    <p>Loading book details...</p>
-                  )}
-                </div>
-              );
-            })}
+          return (
+            <div key={vote.book_id} className={styles.voteCard}>
+              {vote.thumbnail && (
+                <img src={vote.thumbnail} alt={vote.title} /> 
+              )}
+              <div className={styles.voteInfo}>
+                {vote.previewLink ? (
+                <a href={vote.previewLink} target="_blank" rel="noreferrer">
+                  <h3>{vote.title}</h3>
+                </a>
+                ) : (
+                  <h3>{vote.title}</h3>
+                )}
+                <p>Author: {vote.authors?.join(', ')}</p>
+                <p className={styles.rating}>
+                  Your rating: {'⭐'.repeat(vote.rating)} ({vote.rating}/5)
+                </p>
+                {vote.comment && <p>Comment:{vote.comment}</p>}
+                <p className={styles.date}>
+                  Rated: {new Date(vote.created_at).toLocaleDateString()}
+                </p>
+                <button onClick={() => handleRemove(vote.book_id)}>Remove rating</button>
+              </div>
+            </div>
+          );
+        })}
           </div>
         )}
       </div>

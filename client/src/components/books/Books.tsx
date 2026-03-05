@@ -18,21 +18,30 @@ export function Books(){
     setShowRateModal(true);
   };
 
-  const handleRate = async (rating: number) => {
+  const handleRate = async (rating: number, comment:string) => {
   const user = JSON.parse(localStorage.getItem('user') || '{}');
   
   if (!user.id) {
     alert('Please log in to rate books');
     return;
   }
-
+  
   try {
     await axios.post('http://localhost:8080/api/vote', {
       userId: user.id,
       bookId: selectedBook.id,
-      rating
+      rating,
+      comment,
+      bookData: {
+        title: selectedBook.volumeInfo.title,
+        authors: selectedBook.volumeInfo.authors || [],
+        thumbnail: selectedBook.volumeInfo.imageLinks?.thumbnail || selectedBook.volumeInfo.imageLinks?.smallThumbnail,
+        description: selectedBook.volumeInfo.description,
+        previewLink: selectedBook.volumeInfo.previewLink
+      }
     });
     console.log(`Rated ${rating} stars`);
+    alert('Rating saved!');
   } catch (error: any) {
     console.error('Rating failed:', error);
     alert('Failed to save rating');

@@ -25,15 +25,25 @@ db.run(`CREATE TABLE IF NOT EXISTS users (
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 )`);
 
-
 db.run(`CREATE TABLE IF NOT EXISTS votes (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   user_id INTEGER NOT NULL,
   book_id TEXT NOT NULL,
   rating INTEGER CHECK(rating >= 1 AND rating <= 5),
+  comment TEXT,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   UNIQUE(user_id, book_id),
   FOREIGN KEY (user_id) REFERENCES users(id)
+)`);
+
+db.run(`CREATE TABLE IF NOT EXISTS books (
+  book_id TEXT PRIMARY KEY,
+  title TEXT,
+  authors TEXT,
+  thumbnail TEXT,
+  description TEXT,
+  preview_link TEXT,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 )`);
 
 app.post("/api/signup", (req, res) => {
@@ -44,7 +54,7 @@ app.post("/api/signup", (req, res) => {
     [username, password],
     function(err) {
       if (err) {
-        console.error('Signup error:', err); // Logga felet först
+        console.error('Signup error:', err);
         return res.status(400).json({ error: "Username already exists" });
       }
       res.json({ 
@@ -73,13 +83,35 @@ app.post("/api/login", (req, res) => {
   );
 });
 
-app.post("/api/vote", (req, res) => {
-  const { userId, bookId, rating } = req.body;
+app.post("/api/vote", async (req, res) => {
+  const { userId, bookId, rating, comment , bookData } = req.body;
+  
+  if (bookData) {
+    db.run(
+      `INSERT INTO books (book_id, title, authors, thumbnail, description, preview_link) 
+       VALUES (?, ?, ?, ?, ?, ?)
+       ON CONFLICT(book_id) DO UPDATE SET 
+       title = ?, authors = ?, thumbnail = ?, description = ?, preview_link = ?`,
+      [
+        bookId, 
+        bookData.title, 
+        JSON.stringify(bookData.authors), 
+        bookData.thumbnail,
+        bookData.description,
+        bookData.previewLink,
+        bookData.title, 
+        JSON.stringify(bookData.authors), 
+        bookData.thumbnail,
+        bookData.description,
+        bookData.previewLink
+      ]
+    );
+  }
   
   db.run(
-    `INSERT INTO votes (user_id, book_id, rating) VALUES (?, ?, ?)
-     ON CONFLICT(user_id, book_id) DO UPDATE SET rating = ?, created_at = CURRENT_TIMESTAMP`,
-    [userId, bookId, rating, rating],
+    `INSERT INTO votes (user_id, book_id, rating, comment) VALUES (?, ?, ?, ?)
+     ON CONFLICT(user_id, book_id) DO UPDATE SET rating = ?, comment = ?, created_at = CURRENT_TIMESTAMP`,
+    [userId, bookId, rating, comment, rating, comment],
     function(err) {
       if (err) {
         return res.status(400).json({ error: err.message });
@@ -93,13 +125,32 @@ app.get("/api/user-votes/:userId", (req, res) => {
   const { userId } = req.params;
   
   db.all(
-    'SELECT book_id, rating, created_at FROM votes WHERE user_id = ? ORDER BY created_at DESC',
+    `SELECT 
+      v.book_id, 
+      v.rating,
+      v.comment, 
+      v.created_at,
+      b.title,
+      b.authors,
+      b.thumbnail,
+      b.description,
+      b.preview_link as previewLink
+     FROM votes v
+     LEFT JOIN books b ON v.book_id = b.book_id
+     WHERE v.user_id = ? 
+     ORDER BY v.created_at DESC`,
     [userId],
     (err, rows) => {
       if (err) {
         return res.status(500).json({ error: err.message });
       }
-      res.json({ votes: rows });
+      
+      const votes = rows.map(row => ({
+        ...row,
+        authors: row.authors ? JSON.parse(row.authors) : []
+      }));
+      
+      res.json({ votes });
     }
   );
 });
@@ -120,8 +171,6 @@ app.delete("/api/remove", (req, res) =>{
     }
   )
 });
-
-
 
 app.listen(8080, () =>{
     console.log("Server started at 8080");

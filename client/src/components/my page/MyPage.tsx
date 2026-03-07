@@ -148,7 +148,7 @@ const fetchUserVotes = async (userId: number) => {
                 <p className={styles.date}>
                   Rated: {new Date(vote.created_at).toLocaleDateString()}
                 </p>
-                <button onClick={() => handleRemove(vote.book_id)}>Remove rating</button>
+                <button className={styles.removeBtn} onClick={() => handleRemove(vote.book_id)}>Remove rating</button>
               </div>
             </div>
           );

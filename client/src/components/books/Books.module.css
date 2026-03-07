@@ -48,6 +48,14 @@
 }
 
 .rateBook{
-  text-decoration: 25%;
-  width: 25%;
+    background-color: #555555;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+    font-size: 16px;
+    cursor: pointer;
+    margin: 0 auto; 
 }

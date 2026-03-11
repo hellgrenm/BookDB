@@ -1,52 +1,19 @@
 import axios from "axios";
-import {RemoveScroll} from 'react-remove-scroll';
+import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import styles from './Books.module.css'
-import { RateModal } from './RateMobal';
+
 
 export function Books(){
   const [searchParams] = useSearchParams();
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(false);
   const api_key = import.meta.env.VITE_API_KEY;
-  const [showRateModal, setShowRateModal] = useState(false);
-  const [selectedBook, setSelectedBook] = useState<any>(null);
 
-  const openRateModal = (book: any) => {
-    setSelectedBook(book);
-    setShowRateModal(true);
-  };
+  const navigate = useNavigate();
 
-  const handleRate = async (rating: number, comment:string) => {
-  const user = JSON.parse(localStorage.getItem('user') || '{}');
-  
-  if (!user.id) {
-    alert('Please log in to rate books');
-    return;
-  }
-  
-  try {
-    await axios.post('http://localhost:8080/api/vote', {
-      userId: user.id,
-      bookId: selectedBook.id,
-      rating,
-      comment,
-      bookData: {
-        title: selectedBook.volumeInfo.title,
-        authors: selectedBook.volumeInfo.authors || [],
-        thumbnail: selectedBook.volumeInfo.imageLinks?.thumbnail || selectedBook.volumeInfo.imageLinks?.smallThumbnail,
-        description: selectedBook.volumeInfo.description,
-        previewLink: selectedBook.volumeInfo.previewLink
-      }
-    });
-    console.log(`Rated ${rating} stars`);
-    alert('Rating saved!');
-  } catch (error: any) {
-    console.error('Rating failed:', error);
-    alert('Failed to save rating');
-  }
-};
+
 
   useEffect(() => {
     const query = searchParams.get('search');
@@ -81,7 +48,7 @@ export function Books(){
 
       {books.map((book: any) => (
         
-        <div key={book.id} className={styles.book}>
+        <div key={book.id} className={styles.book} onClick={() => navigate(`/book/${book.id}`, { state: {book}} )} >
           {book.volumeInfo.imageLinks?.smallThumbnail && (
             <img 
               src={book.volumeInfo.imageLinks.smallThumbnail} 
@@ -90,18 +57,11 @@ export function Books(){
           )}
           <div className={styles.bookInfo}>
             <h3>
-              <a 
-                className={styles.bookLink} 
-                href={book.volumeInfo.infoLink} 
-                target="_blank"
-                rel="noreferrer"
-              >
-                {book.volumeInfo.title}
-              </a>
-            </h3>
+                {book.volumeInfo.title}            
+             </h3>
             <p>Author: {book.volumeInfo.authors?.join(', ')}</p>
             <p>{book.volumeInfo.description}</p>
-            <button className={styles.rateBook} onClick={() => openRateModal(book)}>Rate ⭐ </button>
+
           </div>
         </div>
       ))}
@@ -110,15 +70,7 @@ export function Books(){
   </main>
 
     
-    {showRateModal && selectedBook && (
-    <RemoveScroll> 
-      <RateModal 
-        book={selectedBook}
-        onClose={() => setShowRateModal(false)}
-        onRate={handleRate}
-      />
-      </RemoveScroll>
-    )}
+
   </>
 )
 }

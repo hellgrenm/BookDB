@@ -7,12 +7,13 @@
 }
 
 .book {
+  cursor: pointer;
   display: flex;
   gap: 1.5rem;
   align-items: flex-start;
   padding: 1rem;
   border: 1px solid #ddd;
-    background-color: black;
+  background-color: black;
   border-radius: 8px;
   width: 50%;
   margin: 10px;
@@ -27,7 +28,6 @@
 
 .bookInfo {
   display: flex;
-
   flex-direction: column;
   gap: 0.5rem;
   flex: 1;
@@ -42,10 +42,7 @@
   margin: 0;
 }
 
-.bookLink {
-  text-decoration: none;
-  color: inherit;
-}
+
 
 .rateBook{
     background-color: #555555;

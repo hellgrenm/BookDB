@@ -15,8 +15,18 @@ const [bookData, setBookData] = useState(location.state?.book || null);
 const [loading, setLoading] = useState(false);
 const api_key = import.meta.env.VITE_API_KEY;
 
-console.log('bookId:', bookId);
-console.log('bookData:', bookData);
+const [loggedInUser, setLoggedInUser] = useState<any>(null);
+
+  useEffect(() => {
+    const savedUser = localStorage.getItem('user');
+    if (savedUser) {
+      const user = JSON.parse(savedUser);
+      setLoggedInUser(user);
+    }
+  }, []);
+
+
+
 
 useEffect(() => {
   if (!bookData && bookId) {
@@ -40,22 +50,33 @@ const fetchBook = async (id: string) => {
 };
 
     return(
+         
         <main>
+      
+          
+          
           {loading && <p>Loading...</p>}
 
-              {bookData && (
-              <div className={styles.bookInfo}> 
+              {bookData && (        
+            <div className={styles.bookInfo}>
               <h1>{bookData.volumeInfo.title} - {bookData.volumeInfo.authors}</h1>
               <img src={bookData.volumeInfo.imageLinks.thumbnail}></img>
-             
-              <div>{parse(bookData.volumeInfo.description)}</div>
+              <p>Genre: {bookData.volumeInfo.categories[0]}</p>
+              <div className={styles.storyDiv}>Story: {parse(bookData.volumeInfo.description)}</div>
+                    
+              {loggedInUser && (
+              <div className={styles.reviewDiv}>
+                <p>Write a review</p>
+              </div>
+              )}
+        
 
-            </div>
-
-
+              </div>
 
             )}
+         
         </main>
+           
     )
 }
 

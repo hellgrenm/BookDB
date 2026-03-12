@@ -4,6 +4,36 @@ main{
 }
 
 .bookInfo {
-    width: 60%;
+    display: grid;
+    grid-template-columns: 65% 35%;
+    grid-template-areas:
+        "header header"
+        "left right"
+        "footer footer"
+        "review review";
+    gap: 20px; 
+    max-width: 40%;
     background: rgba(0, 0, 0, 0.7);
+    justify-content: center; 
+    align-items: center;
     }
+
+.bookInfo h1{
+    grid-area: header;
+}
+
+.bookInfo p{
+    grid-area: left;
+}
+.bookInfo img{
+    grid-area: right;
+}
+
+.storyDiv {
+    grid-area: footer;
+}
+
+.reviewDiv {
+    background: rgba(179, 179, 179, 0.678);
+    grid-area: review;
+}

@@ -123,7 +123,6 @@ app.post("/api/vote", async (req, res) => {
 
 app.get("/api/user-votes/:userId", (req, res) => {
   const { userId } = req.params;
-  
   db.all(
     `SELECT 
       v.book_id, 
@@ -154,6 +153,20 @@ app.get("/api/user-votes/:userId", (req, res) => {
     }
   );
 });
+
+app.get("/api/user-vote/:userId/:bookId", (req, res)=>{
+  const { userId, bookId } = req.params;
+
+  db.get('SELECT * FROM votes WHERE user_id = ? AND book_id = ?', [userId, bookId], function(err, row){
+    if (err){
+      return res.status(500).json({error: err.message});
+    }
+    res.json({ vote: row || null });
+  });
+});
+
+
+
 
 app.delete("/api/remove", (req, res) =>{
   const {userId, bookId} = req.body;

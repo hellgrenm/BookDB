@@ -12,7 +12,7 @@ main{
         "footer footer"
         "review review";
     gap: 20px; 
-    max-width: 40%;
+    max-width: 50%;
     background: rgba(0, 0, 0, 0.7);
     justify-content: center; 
     align-items: center;
@@ -34,6 +34,31 @@ main{
 }
 
 .reviewDiv {
-    background: rgba(179, 179, 179, 0.678);
+    background: rgba(0, 0, 0, 0.7);
     grid-area: review;
+}
+
+.reviewDiv textarea{
+    resize: none;
+}
+
+.stars {
+  display: flex;
+  gap: 1rem;
+  margin: 1rem 0;
+  font-size: 2rem;
+  justify-content: center;
+
+}
+
+.stars button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 2rem;
+color: white;
+}
+
+.stars button:hover {
+  transform: scale(1.2);
 }

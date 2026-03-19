@@ -1,4 +1,6 @@
 .aboutMain{
-    text-align: center;
-    margin-top: 5px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
 }

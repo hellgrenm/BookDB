@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
 import styles from './MyPage.module.css'
 import axios from 'axios';
+import { useNavigate } from "react-router-dom";
+
 
 interface Vote {
   book_id: string;
@@ -16,6 +18,7 @@ interface Vote {
 
 
 export function MyPage(){
+  const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
@@ -128,18 +131,12 @@ const fetchUserVotes = async (userId: number) => {
           <div className={styles.votesContainer}>
             {userVotes.map((vote) => {
           return (
-            <div key={vote.book_id} className={styles.voteCard}>
+            <div key={vote.book_id} className={styles.voteCard} onClick={() => navigate(`/book/${vote.book_id}`)}>
               {vote.thumbnail && (
                 <img src={vote.thumbnail} alt={vote.title} /> 
               )}
               <div className={styles.voteInfo}>
-                {vote.previewLink ? (
-                <a href={vote.previewLink} target="_blank" rel="noreferrer">
                   <h3>{vote.title}</h3>
-                </a>
-                ) : (
-                  <h3>{vote.title}</h3>
-                )}
                 <p>Author: {vote.authors?.join(', ')}</p>
                 <p className={styles.rating}>
                   Your rating: {'⭐'.repeat(vote.rating)} ({vote.rating}/5)
@@ -148,7 +145,13 @@ const fetchUserVotes = async (userId: number) => {
                 <p className={styles.date}>
                   Rated: {new Date(vote.created_at).toLocaleDateString()}
                 </p>
-                <button className={styles.removeBtn} onClick={() => handleRemove(vote.book_id)}>Remove rating</button>
+                <button 
+                  className={styles.removeBtn} 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleRemove(vote.book_id);
+                  }}
+                >Remove rating</button>
               </div>
             </div>
           );

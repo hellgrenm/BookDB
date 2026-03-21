@@ -23,7 +23,7 @@ export function MyPage(){
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
   const [loggedInUser, setLoggedInUser] = useState<any>(null);
-
+  const [confirmDelete, setConfirmDelete] = useState<string | null>(null);  
   const [userVotes, setUserVotes] = useState<Vote[]>([]);
 
 
@@ -145,13 +145,34 @@ const fetchUserVotes = async (userId: number) => {
                 <p className={styles.date}>
                   Rated: {new Date(vote.created_at).toLocaleDateString()}
                 </p>
-                <button 
-                  className={styles.removeBtn} 
+                {confirmDelete == vote.book_id &&(
+                  <div className={styles.confirmDiv}>
+                  <p className={styles.confirmP}>Delete review?</p>
+                   <button 
+                  className={styles.yesBtn} 
                   onClick={(e) => {
                     e.stopPropagation();
                     handleRemove(vote.book_id);
                   }}
+                >Yes</button>
+                  <button 
+                  className={styles.noBtn} 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setConfirmDelete(null);
+                  }}
+                >No</button>
+                </div>
+                )}
+              {confirmDelete !== vote.book_id && (
+                <button 
+                  className={styles.removeBtn} 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setConfirmDelete(vote.book_id);
+                  }}
                 >Remove rating</button>
+              )}
               </div>
             </div>
           );

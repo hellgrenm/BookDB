@@ -1,7 +1,6 @@
 
-.navbar {
+.mainMenu {
   width: 100vw;
-
   background-color: transparent;
   display: flex;
   align-items: center;
@@ -38,16 +37,41 @@
   max-width: 90%;
 }
 
-  .smallMenu {
-    display: none; /* Dold som standard */
-  }
+.smallMenu {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  width: 100vw;
+  gap: 1rem;
+  padding: 10px;
+}
 
+.smallNavLinks {
+  text-decoration: none;
+  color: #ffffff;
+  font-weight: 500;
+  padding: 10px;
+}
+
+.topRow {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  width: 100%;
+  justify-content: center;
+}
+
+.linkRow {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
 
 @media only screen and (max-width: 700px) {
-  .navLinks{
+  .mainMenu {
     display: none;
   }
-  .navLogo:hover + .smallMenu {
-    display: block;
+  .smallMenu {
+    display: flex;
   }
 }

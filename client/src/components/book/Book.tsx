@@ -128,12 +128,12 @@ function handleTextareaChange(e:any){
               )}
               
               {bookData.volumeInfo.categories ? (
-                <p>Genre: {bookData.volumeInfo.categories[0]}</p>
+                <p className={styles.genreTag} >Genre: {bookData.volumeInfo.categories[0]}</p>
               ) : (
                 <p>Genre: Unknown</p>
               )}
               {bookData.volumeInfo.description ?(
-              <div className={styles.storyDiv}>Story: {parse(bookData.volumeInfo.description)}</div>
+              <div className={styles.storyDiv}> <p className={styles.storyTag}>Story:</p> {parse(bookData.volumeInfo.description)}  </div>
 
               ) : (
               <div className={styles.storyDiv}> <p>Hmm. We (Blame google) dont know so much about this book.</p> <p>But please let us know if you like it.</p></div>
